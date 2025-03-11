@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": "e7d0",
+      "name": "ahmed",
+      "email": "ahm@gmail.com",
+      "password": "123456"
+    },
+    {
+      "id": "a1c6",
+      "name": "احمد",
+      "email": "aaa@ggmi.com",
+      "password": "159951"
+    }
+  ]
+}

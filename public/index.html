@@ -1,17 +1,51 @@
 <!DOCTYPE html>
-<html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+<html dir="rtl" lang="ar">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Title and Description -->
+  <title>إدارة المستخدمين | Vue.js User Management</title>
+  <meta name="description" content="نظام إدارة المستخدمين باستخدام Vue.js، لإدارة الحسابات والمهام بكفاءة.">
+
+  <!-- Favicon -->
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <link rel="apple-touch-icon" href="<%= BASE_URL %>apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- Open Graph Meta Tags (for Social Media Sharing) -->
+  <meta property="og:title" content="إدارة المستخدمين | Vue.js User Management">
+  <meta property="og:description" content="نظام إدارة المستخدمين باستخدام Vue.js، لإدارة الحسابات والمهام بكفاءة.">
+  <meta property="og:image" content="<%= BASE_URL %>og-image.jpg">
+  <meta property="og:url" content="https://yourwebsite.com">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Meta Tags (for Twitter Sharing) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="إدارة المستخدمين | Vue.js User Management">
+  <meta name="twitter:description" content="نظام إدارة المستخدمين باستخدام Vue.js، لإدارة الحسابات والمهام بكفاءة.">
+  <meta name="twitter:image" content="<%= BASE_URL %>og-image.jpg">
+
+  <!-- Canonical URL (for SEO) -->
+  <link rel="canonical" href="https://yourwebsite.com">
+
+</head>
+
+<body>
+  <!-- NoScript Fallback -->
+  <noscript>
+    <strong>
+      نأسف، لكن المنصة الرقمية لا تعمل بشكل صحيح بدون تمكين JavaScript. يرجى تمكينه للمتابعة.
+    </strong>
+  </noscript>
+
+  <!-- Vue App Mount Point -->
+  <div id="app"></div>
+
+  <!-- Built Files Will Be Auto-Injected Here -->
+</body>
+
 </html>
