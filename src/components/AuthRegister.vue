@@ -4,7 +4,7 @@
       <div class="card shadow">
         <div class="card-body">
           <h2 class="text-center mb-4">تسجيل جديد</h2>
-          <form @submit.prevent="register">
+          <form @submit.prevent="handleRegister">
             <div class="mb-3">
               <label for="name" class="form-label">الاسم</label>
               <input type="text" class="form-control" id="name" v-model="name" :class="{ 'is-invalid': nameError }">
@@ -32,59 +32,47 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios';
-import { useToast } from 'vue-toastification';
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import { register } from "@/store/auth";
 
-export default {
-  data() {
-    return {
-      name: '',
-      email: '',
-      password: '',
-      nameError: false,
-      emailError: false,
-      passwordError: false
-    };
-  },
-  methods: {
-    validateForm() {
-      this.nameError = !this.name;
-      this.emailError = !this.email || !this.validateEmail(this.email);
-      this.passwordError = !this.password || this.password.length < 6;
-      return !this.nameError && !this.emailError && !this.passwordError;
-    },
-    validateEmail(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
-    },
-    async register() {
-      if (!this.validateForm()) {
-        const toast = useToast();
-        toast.error('الرجاء ملء جميع الحقول بشكل صحيح.');
-        return;
-      }
+const name = ref("");
+const email = ref("");
+const password = ref("");
 
-      try {
-        const response = await axios.get('http://localhost:3000/users?email=' + this.email);
-        if (response.data.length > 0) {
-          const toast = useToast();
-          toast.error('هذا البريد الإلكتروني مسجل بالفعل!');
-        } else {
-          const newUser = {
-            name: this.name,
-            email: this.email,
-            password: this.password
-          };
-          await axios.post('http://localhost:3000/users', newUser);
-          const toast = useToast();
-          toast.success('تم التسجيل بنجاح!');
-          this.$router.push('/login');
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+const nameError = ref(false);
+const emailError = ref(false);
+const passwordError = ref(false);
+const router = useRouter();
+const toast = useToast();
+
+const validateForm = () => {
+  nameError.value = !name.value;
+  emailError.value = !email.value || !validateEmail(email.value);
+  passwordError.value = !password.value || password.value.length < 6;
+  return !nameError.value && !emailError.value && !passwordError.value;
+};
+
+const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+};
+
+const handleRegister = async () => {
+  if (!validateForm()) {
+    toast.error("الرجاء ملء جميع الحقول بشكل صحيح.");
+    return;
+  }
+
+  try {
+    await register({ name: name.value, email: email.value, password: password.value });
+    toast.success("تم التسجيل بنجاح!");
+    router.push("/login");
+  } catch (error) {
+    toast.error(error.message || "حدث خطأ أثناء التسجيل!");
   }
 };
+
 </script>

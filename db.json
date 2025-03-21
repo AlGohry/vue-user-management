@@ -11,6 +11,12 @@
       "name": "احمد",
       "email": "aaa@ggmi.com",
       "password": "159951"
+    },
+    {
+      "id": "7883",
+      "name": "الجوهري",
+      "email": "algohry@domain.com",
+      "password": "123456"
     }
   ]
 }

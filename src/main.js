@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { createPinia } from "pinia";
 import App from './App.vue';
 import router from './router';
 import Toast from 'vue-toastification';
@@ -10,6 +11,9 @@ import './assets/scss/global.scss';
 
 
 const app = createApp(App);
+const pinia = createPinia();
+
+
 // التحقق من تسجيل الدخول قبل إنشاء التطبيق
 const isAuthenticated = localStorage.getItem('userName'); // تحقق من وجود اسم مستخدم في localStorage
 
@@ -17,6 +21,8 @@ if (!isAuthenticated && window.location.pathname !== '/login') {
   router.push('/login'); // إذا لم يكن المستخدم مسجلًا، توجيهه إلى صفحة الدخول
 }
 
+
+app.use(pinia);
 app.use(router);
 app.use(Toast);
 app.mount('#app');
