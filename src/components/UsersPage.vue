@@ -1,50 +1,44 @@
 <template>
   <div class="users-page d-flex flex-column min-vh-100">
     <HeaderComponent />
-
     <main class="container mt-5 flex-grow-1">
       <div class="d-flex justify-content-between mb-4">
         <h2>إدارة المستخدمين</h2>
         <router-link to="/add-user" class="btn btn-primary">
-          <i class="fas fa-plus ms-2"></i>إضافة مستخدم
+          <i class="fas fa-plus ms-2"></i> إضافة مستخدم
         </router-link>
       </div>
 
-      <!-- مؤشر التحميل -->
+      <!-- Loading Indicator -->
       <div v-if="loading" class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
+        <ProgressSpinner />
       </div>
 
-      <!-- الجدول -->
-      <div class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>الاسم</th>
-              <th>البريد الإلكتروني</th>
-              <th>الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(user, index) in users" :key="user.id">
-              <td>{{ index + 1 }}</td>
-              <td>{{ user.name }}</td>
-              <td>{{ user.email }}</td>
-              <td>
-                <button @click="editUser(user.id)" class="btn btn-sm btn-warning" title="تعديل">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button @click="deleteUser(user.id)" class="btn btn-sm btn-danger me-2" title="حذف">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <!-- Users Table -->
+      <DataTable v-if="!loading" :value="users" tableStyle="min-width: 50rem">
+        <Column field="id" header="معرف" style="width: 5%"></Column>
+        <Column field="name" header="الاسم"></Column>
+        <Column field="email" header="البريد الإلكتروني"></Column>
+
+        <!-- Status Column -->
+        <Column header="الحالة">
+          <template #body="{ data }">
+            <Tag :value="getUserRole(data.role)" :severity="getRoleSeverity(data.role)"></Tag>
+          </template>
+        </Column>
+
+        <!-- Actions Column -->
+        <Column header="الإجراءات" style="width: 20%">
+          <template #body="{ data }">
+            <Button icon="pi pi-pencil" class="p-button-warning p-button-sm" @click="editUser(data.id)" />
+            <Button icon="pi pi-trash" class="p-button-danger p-button-sm me-2" @click="deleteUser(data.id)" />
+          </template>
+        </Column>
+      </DataTable>
+
+      <!-- Loading Indicator -->
+      <ProgressSpinner v-if="loading" class="my-5" />
+
     </main>
 
     <FooterComponent />
@@ -54,9 +48,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Button from "primevue/button";
+import Tag from "primevue/tag";
+import ProgressSpinner from "primevue/progressspinner";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
-import { useRouter } from "vue-router";
 
 const users = ref([]);
 const loading = ref(true);
@@ -88,5 +87,23 @@ const deleteUser = async (userId) => {
   }
 };
 
+const getUserRole = (role) => {
+  const roles = { admin: "مدير", member: "عضو", guest: "زائر" };
+  return roles[role] || "غير معروف";
+};
+
+const getRoleSeverity = (role) => {
+  const severities = { admin: "danger", member: "success", guest: "info" };
+  return severities[role] || "secondary";
+};
+
 onMounted(fetchUsers);
 </script>
+
+
+<style scoped>
+.p-datatable {
+  border-radius: 8px;
+  overflow: hidden;
+}
+</style>

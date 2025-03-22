@@ -1,6 +1,9 @@
   <template>
     <div id="app">
-      <router-view></router-view>
+      <!-- Add transition effect to the router-view -->
+      <transition name="fade-slide" mode="out-in">
+        <router-view></router-view>
+      </transition>
     </div>
   </template>
 
