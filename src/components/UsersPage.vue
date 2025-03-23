@@ -9,19 +9,40 @@
         </router-link>
       </div>
 
-      <!-- Loading Indicator -->
+      <!-- 🔍 Search Bar -->
+      <div class="mb-3">
+        <input v-model="searchQuery" type="text" class="form-control" placeholder="🔍 ابحث عن مستخدم..." />
+      </div>
+
+      <!-- 🔄 Loading Indicator -->
       <div v-if="loading" class="text-center my-5">
         <ProgressSpinner />
       </div>
 
-      <!-- Users Table -->
-      <DataTable v-if="!loading" :value="users" tableStyle="min-width: 50rem">
+      <!-- 📊 Users Table -->
+      <DataTable v-if="!loading" :value="sortedUsers" tableStyle="min-width: 50rem" :paginator="true" :rows="5" :rowsPerPageOptions="[5, 10, 15]">
+        
+        <!-- ID Column -->
         <Column field="id" header="معرف" style="width: 5%"></Column>
-        <Column field="name" header="الاسم"></Column>
-        <Column field="email" header="البريد الإلكتروني"></Column>
+
+        <!-- 🔄 Sortable Name Column -->
+        <Column field="name" header="الاسم" @click="sortBy('name')" :sortable="true">
+          <template #header>
+            <i v-if="sortField === 'name'" :class="sortIcon" class="ms-1"></i>
+          </template>
+          <template #body="{ data }">{{ data.name }}</template>
+        </Column>
+
+        <!-- 🔄 Sortable Email Column -->
+        <Column field="email" header="البريد الإلكتروني" @click="sortBy('email')" :sortable="true">
+          <template #header>
+            <i v-if="sortField === 'email'" :class="sortIcon" class="ms-1"></i>
+          </template>
+          <template #body="{ data }">{{ data.email }}</template>
+        </Column>
 
         <!-- Status Column -->
-        <Column header="الحالة">
+        <Column header="الصلاحية">
           <template #body="{ data }">
             <Tag :value="getUserRole(data.role)" :severity="getRoleSeverity(data.role)"></Tag>
           </template>
@@ -36,21 +57,16 @@
         </Column>
       </DataTable>
 
-      <!-- Loading Indicator -->
-      <ProgressSpinner v-if="loading" class="my-5" />
       <Toast />
       <ConfirmDialog />
-
     </main>
 
     <FooterComponent />
-
   </div>
-
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import DataTable from "primevue/datatable";
@@ -65,10 +81,14 @@ import { useToast } from "primevue/usetoast";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
 
-
 const users = ref([]);
 const loading = ref(true);
+const searchQuery = ref("");
+const sortField = ref(""); // 🏷️ Sort Field (name/email)
+const sortOrder = ref(1); // 🔄 1 for Asc, -1 for Desc
 const router = useRouter();
+const toast = useToast();
+const confirm = useConfirm();
 
 const fetchUsers = async () => {
   try {
@@ -81,12 +101,39 @@ const fetchUsers = async () => {
   }
 };
 
+// 🔄 فرز الأعمدة
+const sortBy = (field) => {
+  if (sortField.value === field) {
+    sortOrder.value *= -1; // تبديل الاتجاه (تصاعدي ⇄ تنازلي)
+  } else {
+    sortField.value = field;
+    sortOrder.value = 1; // الافتراضي تصاعدي
+  }
+};
+
+// 📊 Computed: Filtered & Sorted Users
+const sortedUsers = computed(() => {
+  return [...users.value]
+    .filter((user) =>
+      user.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.value.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (!sortField.value) return 0;
+      return (
+        a[sortField.value].localeCompare(b[sortField.value]) * sortOrder.value
+      );
+    });
+});
+
+// ⬆⬇ Sort Icon Dynamic Class
+const sortIcon = computed(() =>
+  sortOrder.value === 1 ? "pi pi-sort-amount-up" : "pi pi-sort-amount-down"
+);
+
 const editUser = (userId) => {
   router.push(`/edit-user/${userId}`);
 };
-
-const toast = useToast();
-const confirm = useConfirm();
 
 const deleteUser = (userId) => {
   confirm.require({
@@ -111,7 +158,6 @@ const deleteUser = (userId) => {
     },
   });
 };
-
 
 const getUserRole = (role) => {
   const roles = { admin: "مدير", member: "عضو", guest: "زائر" };
