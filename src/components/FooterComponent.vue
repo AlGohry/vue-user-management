@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6">
-          <h5>منصة الإدارة</h5>
+          <h5>منصة إدارة المستخدمين</h5>
           <p class="mb-0" :title="`تم إطلاق الموقع في عام ${launchYear}`">
             جميع الحقوق محفوظة &copy; {{ currentYear }}
           </p>

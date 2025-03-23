@@ -99,17 +99,9 @@ footer {
 // Users Page Styles
 // ====================
 .users-page {
-  // min-height: 100vh;
-
-  .table {
-    th {
-      background-color: #f8f9fa;
-      border-top: 2px solid #dee2e6;
-    }
-
-    .btn-sm {
-      padding: 0.25rem 0.5rem;
-    }
+  .p-datatable {
+    border-radius: 8px;
+    overflow: hidden;
   }
 }
 

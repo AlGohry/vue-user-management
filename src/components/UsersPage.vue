@@ -38,11 +38,15 @@
 
       <!-- Loading Indicator -->
       <ProgressSpinner v-if="loading" class="my-5" />
+      <Toast />
+      <ConfirmDialog />
 
     </main>
 
     <FooterComponent />
+
   </div>
+
 </template>
 
 <script setup>
@@ -56,6 +60,11 @@ import Tag from "primevue/tag";
 import ProgressSpinner from "primevue/progressspinner";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
+
+import { useToast } from "primevue/usetoast";
+import ConfirmDialog from "primevue/confirmdialog";
+import { useConfirm } from "primevue/useconfirm";
+
 
 const users = ref([]);
 const loading = ref(true);
@@ -76,16 +85,33 @@ const editUser = (userId) => {
   router.push(`/edit-user/${userId}`);
 };
 
-const deleteUser = async (userId) => {
-  if (confirm("هل أنت متأكد من حذف هذا المستخدم؟")) {
-    try {
-      await axios.delete(`http://localhost:3000/users/${userId}`);
-      await fetchUsers();
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  }
+const toast = useToast();
+const confirm = useConfirm();
+
+const deleteUser = (userId) => {
+  confirm.require({
+    message: "هل أنت متأكد من حذف هذا المستخدم؟",
+    header: "تأكيد الحذف",
+    icon: "pi pi-exclamation-triangle",
+    acceptLabel: "نعم، احذف",
+    rejectLabel: "إلغاء",
+    acceptClass: "p-button-danger",
+    accept: async () => {
+      try {
+        await axios.delete(`http://localhost:3000/users/${userId}`);
+        await fetchUsers();
+        toast.add({ severity: "success", summary: "تم الحذف", detail: "تم حذف المستخدم بنجاح", life: 3000 });
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        toast.add({ severity: "error", summary: "خطأ", detail: "فشل في حذف المستخدم", life: 3000 });
+      }
+    },
+    reject: () => {
+      toast.add({ severity: "info", summary: "إلغاء", detail: "تم إلغاء الحذف", life: 2000 });
+    },
+  });
 };
+
 
 const getUserRole = (role) => {
   const roles = { admin: "مدير", member: "عضو", guest: "زائر" };
@@ -99,11 +125,3 @@ const getRoleSeverity = (role) => {
 
 onMounted(fetchUsers);
 </script>
-
-
-<style scoped>
-.p-datatable {
-  border-radius: 8px;
-  overflow: hidden;
-}
-</style>
