@@ -4,7 +4,7 @@
     <main class="container mt-5 flex-grow-1">
       <div class="d-flex justify-content-between mb-4">
         <h2>إدارة المستخدمين</h2>
-        <router-link to="/add-user" class="btn btn-primary">
+        <router-link v-if="userRole === 'admin'" to="/add-user" class="btn btn-primary">
           <i class="fas fa-plus ms-2"></i> إضافة مستخدم
         </router-link>
       </div>
@@ -20,8 +20,9 @@
       </div>
 
       <!-- 📊 Users Table -->
-      <DataTable v-if="!loading" :value="sortedUsers" tableStyle="min-width: 50rem" :paginator="true" :rows="5" :rowsPerPageOptions="[5, 10, 15]">
-        
+      <DataTable v-if="!loading" :value="sortedUsers" tableStyle="min-width: 50rem" :paginator="true" :rows="5"
+        :rowsPerPageOptions="[5, 10, 15]">
+
         <!-- ID Column -->
         <Column field="id" header="معرف" style="width: 5%"></Column>
 
@@ -41,7 +42,7 @@
           <template #body="{ data }">{{ data.email }}</template>
         </Column>
 
-        <!-- Status Column -->
+        <!-- Role Column -->
         <Column header="الصلاحية">
           <template #body="{ data }">
             <Tag :value="getUserRole(data.role)" :severity="getRoleSeverity(data.role)"></Tag>
@@ -51,8 +52,8 @@
         <!-- Actions Column -->
         <Column header="الإجراءات" style="width: 20%">
           <template #body="{ data }">
-            <Button icon="pi pi-pencil" class="p-button-warning p-button-sm" @click="editUser(data.id)" />
-            <Button icon="pi pi-trash" class="p-button-danger p-button-sm me-2" @click="deleteUser(data.id)" />
+            <Button v-if="userRole !== 'guest'" icon="pi pi-pencil" class="p-button-warning p-button-sm" @click="editUser(data.id)" />
+            <Button v-if="userRole === 'admin'" icon="pi pi-trash" class="p-button-danger p-button-sm me-2" @click="deleteUser(data.id)" />
           </template>
         </Column>
       </DataTable>
@@ -76,7 +77,7 @@ import Tag from "primevue/tag";
 import ProgressSpinner from "primevue/progressspinner";
 import HeaderComponent from "@/components/HeaderComponent.vue";
 import FooterComponent from "@/components/FooterComponent.vue";
-
+import userService from "@/services/userService";
 import { useToast } from "primevue/usetoast";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
@@ -90,6 +91,17 @@ const router = useRouter();
 const toast = useToast();
 const confirm = useConfirm();
 
+// 🔄 User Role State
+const userRole = ref("guest"); 
+
+// 🔄 Fetch Current User Role
+const fetchCurrentUser = async () => {
+  const user = await userService.getCurrentUser();
+  userRole.value = user.role || "guest";
+  console.log("🚀 Current User Role:", userRole.value);
+};
+
+
 const fetchUsers = async () => {
   try {
     const response = await axios.get("http://localhost:3000/users");
@@ -101,7 +113,7 @@ const fetchUsers = async () => {
   }
 };
 
-// 🔄 فرز الأعمدة
+// 🔄 Sort Users by Field
 const sortBy = (field) => {
   if (sortField.value === field) {
     sortOrder.value *= -1; // تبديل الاتجاه (تصاعدي ⇄ تنازلي)
@@ -136,6 +148,7 @@ const editUser = (userId) => {
 };
 
 const deleteUser = (userId) => {
+  if (userRole.value !== "admin") return;
   confirm.require({
     message: "هل أنت متأكد من حذف هذا المستخدم؟",
     header: "تأكيد الحذف",
@@ -169,5 +182,9 @@ const getRoleSeverity = (role) => {
   return severities[role] || "secondary";
 };
 
-onMounted(fetchUsers);
+// 🔄 Fetch Users on Mount
+onMounted(async () => {
+  await fetchCurrentUser();// fetch the current user role first
+  await fetchUsers(); // then fetch the users
+});
 </script>

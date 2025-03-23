@@ -40,16 +40,23 @@ const handleLogin = async () => {
       `http://localhost:3000/users?email=${email.value}&password=${password.value}`
     );
 
-    if (response.data.length > 0) { // التحقق من وجود البريد الإلكتروني وكلمة المرور
-      const user = response.data[0];  // تعريف المستخدم
-      login(user); // تسجيل الدخول باستخدام auth.js
+    if (response.data.length > 0) { 
+      const user = response.data[0];  
+      
+      // 📝 **احفظ بيانات المستخدم في Local Storage**
+      localStorage.setItem("currentUserId", user.id); 
+      
+      // ✅ **تحديث النظام بحالة المستخدم**
+      login(user); 
+
       toast.success(`مرحبًا ${user.name}!`);
-      router.push("/"); // التوجيه إلى الصفحة الرئيسية
+      router.push("/"); 
     } else {  
       toast.error("البريد الإلكتروني أو كلمة المرور غير صحيحة!"); 
     }
   } catch (error) { 
     console.error("Error logging in:", error);  
+    toast.error("حدث خطأ أثناء تسجيل الدخول!"); 
   }
 };
 </script>

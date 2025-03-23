@@ -11,7 +11,8 @@
       "id": "4cd0",
       "name": "خلاد",
       "email": "info@khlad.com",
-      "role": "member"
+      "password": "000000",
+      "role": "admin"
     }
   ]
 }
