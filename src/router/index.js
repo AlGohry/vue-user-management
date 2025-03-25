@@ -3,10 +3,10 @@ import AuthLogin from '../components/auth/AuthLogin.vue';
 import AuthRegister from '../components/auth/AuthRegister.vue';
 import HomePage from '../components/HomePage.vue';
 import ForgotPassword from '@/components/auth/ForgotPassword.vue';
-import UsersPage from '@/components/UsersPage.vue';
+import UsersPage from '@/components/users/UsersPage.vue';
 import auth from '../store/auth'
 import { useToast } from "vue-toastification";
-import UserForm from '@/components/UserForm.vue';
+import UserForm from '@/components/users/UserForm.vue';
 const toast = useToast(); 
 
 const routes = [
