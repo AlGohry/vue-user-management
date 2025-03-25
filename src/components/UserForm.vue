@@ -47,8 +47,8 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import { useToast } from "primevue/usetoast";
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
+import HeaderComponent from "@/components/layout/HeaderComponent.vue";
+import FooterComponent from "@/components/layout/FooterComponent.vue";
 // Route and Router instances
 const route = useRoute();
 const router = useRouter();

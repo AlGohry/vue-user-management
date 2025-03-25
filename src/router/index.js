@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import AuthLogin from '../components/AuthLogin.vue';
-import AuthRegister from '../components/AuthRegister.vue';
+import AuthLogin from '../components/auth/AuthLogin.vue';
+import AuthRegister from '../components/auth/AuthRegister.vue';
 import HomePage from '../components/HomePage.vue';
-import ForgotPassword from '@/components/ForgotPassword.vue';
+import ForgotPassword from '@/components/auth/ForgotPassword.vue';
 import UsersPage from '@/components/UsersPage.vue';
-import auth from "@/store/auth.js"; 
+import auth from '../store/auth'
 import { useToast } from "vue-toastification";
 import UserForm from '@/components/UserForm.vue';
 const toast = useToast(); 

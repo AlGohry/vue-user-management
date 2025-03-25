@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import auth, { logout } from "../store/auth";
+import auth, { logout } from "@/store/auth";
 
 const router = useRouter();
 const userName = computed(() => (auth.user ? auth.user.name : "زائر"));
@@ -17,7 +17,7 @@ const handleLogout = () => {
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-between">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <img src="../assets/logo.png" alt="Vue Logo" width="40" height="40" class="ms-2" />
+          <img src="@/assets/logo.png" alt="Vue Logo" width="40" height="40" class="ms-2" />
           <span class="fs-4">إدارة المستخدمين</span>
         </a>
 

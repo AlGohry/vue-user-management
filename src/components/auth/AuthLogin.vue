@@ -24,10 +24,10 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router"; 
-import axios from "axios";  // استدعاء axios
-import { useToast } from "vue-toastification";  // استدعاء الرسائل التوضيحية
-import { login } from "../store/auth"; // استدعاء دالة تسجيل الدخول
-import AuthLayout from "./AuthLayout.vue"; // استدعاء القالب
+import axios from "axios";  // Import axios
+import { useToast } from "vue-toastification";  // Import toast notifications
+import { login } from "@/store/auth.js"; // Import login function
+import AuthLayout from "@/components/auth/AuthLayout"; // Import AuthLayout
 
 const email = ref("");
 const password = ref("");
