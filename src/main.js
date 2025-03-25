@@ -12,7 +12,7 @@ import 'vue-toastification/dist/index.css';
 import 'bootstrap/dist/css/bootstrap.css'; // Default Bootstrap CSS
 import 'bootstrap-rtl/dist/css/bootstrap-rtl.css'; // Bootstrap RTL CSS
 import '@fortawesome/fontawesome-free/css/all.css';
-import './assets/scss/global.scss';
+import '@/assets/scss/global.scss';
 
 const app = createApp(App);
 app.use(PrimeVue, {

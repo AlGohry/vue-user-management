@@ -18,6 +18,7 @@ const routes = [
   { path: '/users', component: UsersPage, meta: { requiresAuth: true } }, // Users page requires login
   { path: "/add-user", component: UserForm }, // Add user
   { path: "/edit-user/:id", component: UserForm, props: true }, // Edit user
+  { path: "/profile", name: "Profile", component: () => import("@/components/ProfileView.vue"), meta: { requiresAuth: true } } // Profile view page requires login
 ];
 
 const router = createRouter({
