@@ -1,0 +1,17 @@
+$font-family: 'Cairo', sans-serif;
+
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #ffffff;
+  --text-color: #2c3e50;
+  --header-footer-bg: #343a40;
+}
+
+.dark-mode {
+  --primary-color: #1e88e5;
+  --secondary-color: #b0bec5;
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --header-footer-bg: #1e1e1e;
+}

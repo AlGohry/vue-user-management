@@ -1,85 +1,44 @@
-// ====================
-// Variables
-// ====================
-$primary-color: #007bff;
-$secondary-color: #6c757d;
-$font-family: 'Cairo', sans-serif;
+@import 'variables';
+@import 'transitions';
 
 // ====================
 // Global Styles
 // ====================
-body {
+body, #app {
   font-family: $font-family;
   text-align: right;
   margin: 0;
   padding: 0;
-  color: #2c3e50;
-}
-
-#app {
-  font-family: $font-family;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: right;
-}
-// Page transition effect
-.fade-slide-enter-active, .fade-slide-leave-active {
-  transition: all 0.5s ease;
-}
-
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-
-// ====================
-// Toastification Styles
-// ====================
-.Vue-Toastification__toast {
-  font-family: $font-family !important;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 // ====================
-// Spinner Styles
+// Components Styles
 // ====================
-.spinner-border {
-  width: 3rem;
-  height: 3rem;
+.card {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--secondary-color);
 }
 
 // ====================
-// Header Styles
+// Layout Styles (Header & Footer)
 // ====================
-header {
-  background-color: #343a40;
-  color: white;
+header, footer {
+  background-color: var(--header-footer-bg);
+  color: var(--text-color);
   padding: 1rem 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  .nav-link {
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
-  }
+header .nav-link {
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
 }
 
 // ====================
-// Footer Styles
-// ====================
-footer {
-  background-color: #343a40;
-  color: white;
-  padding: 1rem 0;
-  margin-top: auto;
-}
-
-// ====================
-// Home Page Styles
+// Pages Styles
 // ====================
 .home-page {
   display: flex;
@@ -95,35 +54,33 @@ footer {
   }
 }
 
-// ====================
-// Users Page Styles
-// ====================
-.users-page {
-  .p-datatable {
-    border-radius: 8px;
-    overflow: hidden;
-  }
+.users-page .p-datatable {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.login-page, .register-page .container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.login-page, .register-page .card {
+  border: none;
+  border-radius: 10px;
 }
 
 // ====================
-// Auth Pages (Login & Register) Styles
+// Utility Styles (Toast, Spinner, Responsive)
 // ====================
-.login-page,
-.register-page {
-  .container {
-    max-width: 400px;
-    margin: 0 auto;
-  }
-
-  .card {
-    border: none;
-    border-radius: 10px;
-  }
+.Vue-Toastification__toast {
+  font-family: $font-family !important;
 }
 
-// ====================
-// Responsive Styles
-// ====================
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
 @media (max-width: 768px) {
   .table-responsive {
     overflow-x: auto;

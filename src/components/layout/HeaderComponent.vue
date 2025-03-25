@@ -1,16 +1,3 @@
-<script setup>
-import { computed } from "vue";
-import { useRouter } from "vue-router";
-import auth, { logout } from "@/store/auth";
-
-const router = useRouter();
-const userName = computed(() => (auth.user ? auth.user.name : "زائر"));
-
-const handleLogout = () => {
-  logout();
-  router.push("/login");
-};
-</script>
 
 <template>
   <header class="p-3 text-bg-dark">
@@ -29,10 +16,45 @@ const handleLogout = () => {
         </ul>
 
         <div class="text-end">
-          <button v-if="auth.user" @click="handleLogout" class="btn btn-outline-light">تسجيل الخروج</button>
+          <button @click="toggleTheme" class="btn btn-outline-secondary ms-2">
+            <span v-if="isDarkMode" title="تبديل إلى الوضع الفاتح">🌞 </span>
+            <span v-else title="تبديل إلى الوضع  الداكن ">🌙 </span>
+          </button>
+          <button v-if="auth.user" @click="handleLogout" class="btn btn-outline-light ">تسجيل الخروج</button>
           <router-link v-else to="/login" class="btn btn-outline-light">تسجيل الدخول</router-link>
         </div>
       </div>
     </div>
   </header>
 </template>
+
+
+<script setup>
+import { computed, ref, watchEffect } from "vue"; 
+import { useRouter } from "vue-router";
+import auth, { logout } from "@/store/auth"; // Import the auth store
+
+// Check the theme from local storage
+const isDarkMode = ref(localStorage.getItem("theme") === "dark");
+
+// Watch for changes in the theme and update the body class
+watchEffect(() => {
+  document.body.classList.toggle("dark-mode", isDarkMode.value);
+});
+
+// Toggle the theme
+const toggleTheme = () => {
+  isDarkMode.value = !isDarkMode.value;
+  localStorage.setItem("theme", isDarkMode.value ? "dark" : "light");
+};
+
+
+const router = useRouter();
+const userName = computed(() => (auth.user ? auth.user.name : "زائر"));
+
+// Logout the user
+const handleLogout = () => {
+  logout();
+  router.push("/login");
+};
+</script>

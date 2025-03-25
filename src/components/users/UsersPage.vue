@@ -1,14 +1,17 @@
 <template>
   <div class="users-page d-flex flex-column min-vh-100">
     <HeaderComponent />
+    <!-- 🚀 Main Content -->
     <main class="container mt-5 flex-grow-1">
+      
+      <!-- 🚀 Page Title & Add User Button -->
       <div class="d-flex justify-content-between mb-4">
         <h2>إدارة المستخدمين</h2>
         <router-link v-if="userRole === 'admin'" to="/add-user" class="btn btn-primary">
           <i class="fas fa-plus ms-2"></i> إضافة مستخدم
         </router-link>
       </div>
-
+ 
       <!-- 🔍 Search Bar -->
       <div class="mb-3">
         <input v-model="searchQuery" type="text" class="form-control" placeholder="🔍 ابحث عن مستخدم..." />
@@ -52,16 +55,25 @@
         <!-- Actions Column -->
         <Column header="الإجراءات" style="width: 20%">
           <template #body="{ data }">
-            <Button v-if="userRole !== 'guest'" icon="pi pi-pencil" class="p-button-warning p-button-sm" @click="editUser(data.id)" />
-            <Button v-if="userRole === 'admin'" icon="pi pi-trash" class="p-button-danger p-button-sm me-2" @click="deleteUser(data.id)" />
+            <Button v-if="userRole !== 'guest'" icon="pi pi-pencil" class="p-button-warning p-button-sm"
+              @click="editUser(data.id)" />
+            <Button v-if="userRole === 'admin'" icon="pi pi-trash" class="p-button-danger p-button-sm me-2"
+              @click="deleteUser(data.id)" />
           </template>
         </Column>
       </DataTable>
 
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <h5>إجمالي المستخدمين: {{ totalUsers }}</h5>
+        <div>
+          <span class="badge bg-danger ">مدراء: {{ totalAdmins }}</span>
+          <span class="badge bg-success me-2">أعضاء: {{ totalMembers }}</span>
+        </div>
+      </div>
+
       <Toast />
       <ConfirmDialog />
     </main>
-
     <FooterComponent />
   </div>
 </template>
@@ -92,7 +104,7 @@ const toast = useToast();
 const confirm = useConfirm();
 
 // 🔄 User Role State
-const userRole = ref("guest"); 
+const userRole = ref("guest");
 
 // 🔄 Fetch Current User Role
 const fetchCurrentUser = async () => {
@@ -101,7 +113,12 @@ const fetchCurrentUser = async () => {
   console.log("🚀 Current User Role:", userRole.value);
 };
 
+// 📊 Computed: Total Users, Admins, Members
+const totalUsers = computed(() => users.value.length);
+const totalAdmins = computed(() => users.value.filter(user => user.role === 'admin').length);
+const totalMembers = computed(() => users.value.filter(user => user.role === 'member').length);
 
+// 🔄 Fetch Users from API
 const fetchUsers = async () => {
   try {
     const response = await axios.get("http://localhost:3000/users");
@@ -143,10 +160,12 @@ const sortIcon = computed(() =>
   sortOrder.value === 1 ? "pi pi-sort-amount-up" : "pi pi-sort-amount-down"
 );
 
+// 🔄 Edit User Function
 const editUser = (userId) => {
   router.push(`/edit-user/${userId}`);
 };
 
+// 🔄 Delete User Function
 const deleteUser = (userId) => {
   if (userRole.value !== "admin") return;
   confirm.require({
@@ -172,11 +191,13 @@ const deleteUser = (userId) => {
   });
 };
 
+// 🔄 Get User Role
 const getUserRole = (role) => {
   const roles = { admin: "مدير", member: "عضو", guest: "زائر" };
   return roles[role] || "غير معروف";
 };
 
+// 🔄 Get Role Severity
 const getRoleSeverity = (role) => {
   const severities = { admin: "danger", member: "success", guest: "info" };
   return severities[role] || "secondary";
