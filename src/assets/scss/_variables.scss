@@ -6,6 +6,10 @@ $font-family: 'Cairo', sans-serif;
   --background-color: #ffffff;
   --text-color: #2c3e50;
   --header-footer-bg: #343a40;
+  --background-light: #f9f9f9;
+  --text-light: #333;
+  --card-light: #fff;
+
 }
 
 .dark-mode {
@@ -14,4 +18,7 @@ $font-family: 'Cairo', sans-serif;
   --background-color: #121212;
   --text-color: #ffffff;
   --header-footer-bg: #1e1e1e;
+  --background-dark: #1a1a1a;
+  --text-dark: #f1f1f1;
+  --card-dark: #242424;
 }

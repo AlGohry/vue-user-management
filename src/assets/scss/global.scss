@@ -1,5 +1,6 @@
-@import 'variables';
-@import 'transitions';
+@import 'variables';  //variables scss
+@import 'transitions';  //transitions scss
+@import './pages/_profile'; //profile scss
 
 // ====================
 // Global Styles
@@ -12,6 +13,9 @@ body, #app {
   background-color: var(--background-color);
   color: var(--text-color);
 }
+input, textarea, select, button, .text-left {
+  text-align: left !important;
+}
 
 // ====================
 // Components Styles
@@ -19,7 +23,12 @@ body, #app {
 .card {
   background-color: var(--background-color);
   color: var(--text-color);
+}
+
+.users-page .card, 
+.p-datatable .card {
   border: 1px solid var(--secondary-color);
+  border-radius: 8px;
 }
 
 // ====================
@@ -90,4 +99,17 @@ header .nav-link {
     flex-direction: column;
     gap: 1rem;
   }
+}
+
+// ====================
+// Buttons Styles (Fix)
+// ====================
+.btn {
+  width: auto; // تصحيح حجم الزر ليكون تلقائي
+  margin-bottom: 0; // إلغاء المسافة التلقائية بين الأزرار
+}
+
+.profile-actions .btn {
+  width: 100%; // تخصيص فقط لأزرار صفحة البروفايل
+  margin-bottom: 10px;
 }
