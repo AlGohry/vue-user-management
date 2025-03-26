@@ -14,7 +14,7 @@
         <label for="password" class="form-label">كلمة المرور</label>
         <input type="password" class="form-control" id="password" v-model="password" required />
       </div>
-      <button type="submit" class="btn btn-primary w-100">تسجيل</button>
+      <button type="submit" class="btn btn-primary">تسجيل</button>
     </form>
     <p class="mt-3">
       لديك حساب؟ <router-link to="/login">سجل الدخول هنا</router-link>

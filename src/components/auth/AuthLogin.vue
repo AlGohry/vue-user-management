@@ -10,7 +10,7 @@
         <label for="password" class="form-label">كلمة المرور</label>
         <input type="password" class="form-control" id="password" v-model="password" required />
       </div>
-      <button type="submit" class="btn btn-primary w-100">تسجيل الدخول</button>
+      <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
     </form>
     <p class="mt-3">
       ليس لديك حساب؟ <router-link to="/register">سجل هنا</router-link>
