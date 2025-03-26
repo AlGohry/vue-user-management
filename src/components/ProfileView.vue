@@ -34,7 +34,8 @@
       </div>
 
       <div class="profile-actions">
-        <button class="btn btn-primary">تعديل الملف الشخصي</button>
+        <!-- <button class="btn btn-primary">تعديل الملف الشخصي</button> -->
+        <router-link to="/profile/edit" class="btn btn-primary">تعديل الملف الشخصي</router-link>
         <button class="btn btn-danger" @click="handleLogout">تسجيل الخروج</button>
       </div>
     </div>
@@ -49,6 +50,8 @@ import { computed, ref, watchEffect } from 'vue';
 import auth, { logout } from '@/store/auth';
 import HeaderComponent from './layout/HeaderComponent.vue';
 import FooterComponent from './layout/FooterComponent.vue';
+import defaultAvatarImg from '@/assets/images/user_avatar.jpg';
+
 // تابع الثيم من LocalStorage
 const isDarkMode = ref(localStorage.getItem("theme") === "dark");
 
@@ -57,7 +60,8 @@ watchEffect(() => {
 });
 
 const user = computed(() => auth.user || { name: 'مستخدم مجهول', email: '', avatar: '', role: '' });
-const defaultAvatar = '/images/default-avatar.png';
+const defaultAvatar = defaultAvatarImg;
+
 
 const handleLogout = () => {
   logout();
