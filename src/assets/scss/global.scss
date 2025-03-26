@@ -13,9 +13,9 @@ body, #app {
   background-color: var(--background-color);
   color: var(--text-color);
 }
-input, textarea, select, button, .text-left {
-  text-align: left !important;
-}
+// input, textarea, select, button, .text-left {
+//   text-align: left !important;
+// }
 
 // ====================
 // Components Styles
@@ -105,11 +105,7 @@ header .nav-link {
 // Buttons Styles (Fix)
 // ====================
 .btn {
-  width: auto; // تصحيح حجم الزر ليكون تلقائي
-  margin-bottom: 0; // إلغاء المسافة التلقائية بين الأزرار
+  width: auto; 
+  margin-bottom: 0; 
 }
 
-.profile-actions .btn {
-  width: 100%; // تخصيص فقط لأزرار صفحة البروفايل
-  margin-bottom: 10px;
-}
