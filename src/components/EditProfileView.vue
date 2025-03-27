@@ -57,8 +57,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
+import axios from "axios";
 import auth from "@/store/auth";
 import HeaderComponent from "@/components/layout/HeaderComponent.vue";
 import FooterComponent from "@/components/layout/FooterComponent.vue";
@@ -69,13 +71,22 @@ const user = computed(() => auth.user || { name: "", email: "", phone: "", addre
 
 // Form data
 const form = ref({
-  name: user.value.name,
-  email: user.value.email,
-  phone: user.value.phone || "",
-  address: user.value.address || "",
+  name: "",
+  email: "",
+  phone: "",
+  address: "",
   password: "",
   confirmPassword: "",
-  avatar: user.value.avatar || "",
+});
+
+// Fetch user data from API
+onMounted(async () => {
+  try {
+    const response = await axios.get(`http://localhost:3000/users/${auth.user.id}`);
+    form.value = { ...response.data, password: "", confirmPassword: "" };
+  } catch (error) {
+    console.error("خطأ في جلب بيانات المستخدم:", error);
+  }
 });
 
 // Default avatar image
@@ -96,25 +107,37 @@ const handleImageUpload = (event) => {
 };
 
 // Password mismatch
-const passwordMismatch = computed(() => form.value.password && form.value.password !== form.value.confirmPassword);
-
+const passwordMismatch = computed(() => form.value.password && form.value.password == form.value.confirmPassword);
 // Update profile
 const router = useRouter();
-const updateProfile = () => {
+const toast = useToast();
+
+// Update data in Pinia and localStorage
+const updateProfile = async () => {
   if (passwordMismatch.value) {
-    alert("تأكد من تطابق كلمة المرور!");
+    toast.error("كلمة المرور غير متطابقة");
     return;
   }
 
-  // ** Send data to API **
-  console.log("Updated data:", form.value);
-  
-  // Update user data
-  auth.user = { ...auth.user, ...form.value };
+  try {
+    const updatedUser = { ...form.value };
+    if (updatedUser.password) delete updatedUser.password; // لا ترسل كلمة مرور فارغة
 
-  // Redirect to profile page
-  router.push("/profile");
+    await axios.put(`http://localhost:3000/users/${auth.user.id}`, updatedUser);
+    
+    // تحديث البيانات في localStorage
+    auth.user = updatedUser;
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+
+    
+    toast.success("تم تحديث الملف الشخصي بنجاح");
+    router.push("/profile");
+  } catch (error) {
+    toast.error("خطأ في تحديث الملف الشخصي");
+    console.error("خطأ في تحديث بيانات المستخدم:", error);
+  }
 };
+
 </script>
 
 <style scoped>
